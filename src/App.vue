@@ -1,28 +1,45 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div>
+      <input type="text" v-model="inputValue" @keyup.enter="handleSubmit">
+      <input type="submit" @click="handleSubmit">
+    </div>
+    <ul>
+      <todoItem
+        v-for="(item,index) of list"
+        :key="index"
+        :content="item"
+        :index="index"
+        @delete="handleDelete"
+      ></todoItem>
+    </ul>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import todoItem from "./components/todoItem.vue";
 
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
+  components: { todoItem: todoItem },
+  data() {
+    return {
+      inputValue: "",
+      list: []
+    };
+  },
+  methods: {
+    handleSubmit() {
+      if (this.inputValue) {
+        this.list.unshift(this.inputValue);
+        this.inputValue = "";
+      }
+    },
+    handleDelete(index) {
+      this.list.splice(index, 1);
+    }
   }
-}
+};
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style scoped>
 </style>
